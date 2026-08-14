@@ -1,0 +1,24 @@
+{
+  "name": "megaracing",
+  "version": "0.4.0",
+  "private": true,
+  "description": "MegaRacing - live binary prediction game with Megapot integration",
+  "workspaces": [
+    "contracts/*",
+    "backend",
+    "frontend",
+    "agents/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces --if-present",
+    "deploy:contract": "npm run deploy --workspace=contracts",
+    "agent:example": "npm run dev --workspace=agents/example-agent"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
