@@ -7,9 +7,6 @@
     "test": "hardhat test",
     "deploy": "hardhat run scripts/deploy.ts"
   },
-  "dependencies": {
-    "@openzeppelin/contracts": "^5.0.0"
-  },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "hardhat": "^2.22.0",
