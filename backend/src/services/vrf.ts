@@ -12,7 +12,6 @@ export class MockVRF {
   }
 
   private randomToMultiplier(random: number): number {
-    // Prototype multiplier distribution
     if (random < 300_000) return 10;
     if (random < 1_000_000) return 8;
     if (random < 2_500_000) return 5;
