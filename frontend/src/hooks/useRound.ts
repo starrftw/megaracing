@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "";
+
 export function useRound() {
   const [round, setRound] = useState<any>({
     roundId: 1,
@@ -13,7 +15,7 @@ export function useRound() {
   useEffect(() => {
     const timer = setInterval(async () => {
       try {
-        const res = await fetch("/api/round/current");
+        const res = await fetch(`${BACKEND_URL}/api/round/current`);
         if (!res.ok) return;
         const data = await res.json();
         setRound(data);
