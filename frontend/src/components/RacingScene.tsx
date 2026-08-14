@@ -1,7 +1,7 @@
 import { useEffect, useRef, useMemo } from "react";
 import * as THREE from "three";
 
-export function RacingScene({ round }: { round: any }) {
+export function RacingScene() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const upColor = useMemo(() => 0x00ff88, []);

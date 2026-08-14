@@ -37,7 +37,7 @@ export default function App() {
         <h1 style={{ margin: 0 }}>MegaRacing</h1>
         <span style={{ opacity: 0.7, fontSize: 12 }}>Prototype v0.4</span>
       </header>
-      <RacingScene round={round} />
+      <RacingScene />
       <BetPanel round={round} />
       <HonkShop />
       <AgentPanel />
