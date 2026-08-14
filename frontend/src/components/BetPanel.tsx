@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 type Side = "UP" | "DOWN";
-
 const BET_SIZES = [0.5, 1, 5, 25];
 
 export function BetPanel({ round }: { round: any }) {
