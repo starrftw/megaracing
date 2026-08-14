@@ -24,6 +24,6 @@ npm run dev
 
 ## Assumptions
 
-- SQLite for prototype. Production: Postgres.
+- SQLite planned for prototype persistence; current implementation is in-memory.
 - Oracle: CoinGecko public API for BTC 1-min candles.
 - VRF: mocked in backend for prototype.

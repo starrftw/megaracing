@@ -1,17 +1,15 @@
-import { Router } from "express";
+import { Router, Response } from "express";
+import { RoundEngine } from "../services/roundEngine.js";
 
 export const roundRouter = Router();
+const engine = new RoundEngine();
 
-roundRouter.get("/current", (_req, res) => {
-  res.json({
-    roundId: "stub",
-    status: "betting",
-    timeLeft: 30,
-    strikePrice: null,
-    honksEnabled: true
-  });
+roundRouter.get("/current", (_req, res: Response) => {
+  const round = engine.getCurrentRound();
+  res.json(round);
 });
 
-roundRouter.get("/:id", (req, res) => {
-  res.json({ roundId: req.params.id, status: "stub" });
+roundRouter.get("/:id", (req, res: Response) => {
+  const round = engine.getRound(req.params.id);
+  res.json(round);
 });

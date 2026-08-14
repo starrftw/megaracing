@@ -5,3 +5,6 @@ build
 coverage
 *.log
 .DS_Store
+CONTEXT_TRANSFER.md
+docs/PRD-v0.1.md
+docs/context-market-strategy.md
