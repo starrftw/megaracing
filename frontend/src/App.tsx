@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { RacingScene } from "./components/RacingScene";
 import { BetPanel } from "./components/BetPanel";
 import { HonkShop } from "./components/HonkShop";

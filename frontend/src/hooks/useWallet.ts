@@ -1,5 +1,4 @@
-import { useAccount, connect, disconnect } from "wagmi";
-import { baseSepolia } from "wagmi/chains";
+import { useAccount } from "wagmi";
 
 export function useWallet() {
   const account = useAccount();
@@ -8,7 +7,5 @@ export function useWallet() {
     address: account.address,
     chain: account.chain,
     isConnected: account.isConnected,
-    connect,
-    disconnect,
   };
 }
