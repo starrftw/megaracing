@@ -1,9 +1,38 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+// Minimal ReentrancyGuard for Remix (no OpenZeppelin dependency)
+contract ReentrancyGuard {
+    uint256 private _status;
+    constructor() { _status = 1; }
+    modifier nonReentrant() {
+        require(_status == 1, "REENTRANCY");
+        _status = 2;
+        _;
+        _status = 1;
+    }
+}
+
+// Minimal SafeERC20 for Remix
+library SafeERC20 {
+    function safeTransferFrom(IERC20 token, address from, address to, uint256 amount) internal {
+        bool ok = token.transferFrom(from, to, amount);
+        require(ok, "TRANSFER_FAILED");
+    }
+    function safeTransfer(IERC20 token, address to, uint256 amount) internal {
+        bool ok = token.transfer(to, amount);
+        require(ok, "TRANSFER_FAILED");
+    }
+}
+
+// Minimal IERC20 for Remix
+interface IERC20 {
+    function transferFrom(address from, address to, uint256 amount) external returns (bool);
+    function transfer(address to, uint256 amount) external returns (bool);
+    function balanceOf(address account) external view returns (uint256);
+    function allowance(address owner, address spender) external view returns (uint256);
+    function approve(address spender, uint256 amount) external returns (bool);
+}
 
 contract MegaRace is ReentrancyGuard {
     using SafeERC20 for IERC20;
@@ -39,12 +68,7 @@ contract MegaRace is ReentrancyGuard {
     address public operator;
 
     event BetPlaced(uint256 indexed roundId, address indexed player, bool side, uint256 amount);
-    event RoundResolved(
-        uint256 indexed roundId,
-        bool winningSide,
-        uint256 totalPot,
-        uint256 lpProvided
-    );
+    event RoundResolved(uint256 indexed roundId, bool winningSide, uint256 totalPot, uint256 lpProvided);
     event PayoutClaimed(uint256 indexed roundId, address indexed player, uint256 amount);
     event HonksAwarded(address indexed player, uint256 amount);
 
@@ -72,10 +96,7 @@ contract MegaRace is ReentrancyGuard {
         return roundId;
     }
 
-    function placeBet(uint256 _roundId, bool _side, uint256 _amount)
-        external
-        nonReentrant
-    {
+    function placeBet(uint256 _roundId, bool _side, uint256 _amount) external nonReentrant {
         Round storage round = rounds[_roundId];
         require(block.timestamp >= round.startTime, "not started");
         require(block.timestamp < round.endTime, "betting closed");
@@ -84,9 +105,7 @@ contract MegaRace is ReentrancyGuard {
 
         usdc.safeTransferFrom(msg.sender, address(this), _amount);
 
-        roundBets[_roundId].push(
-            Bet(msg.sender, _side, _amount, _roundId, false)
-        );
+        roundBets[_roundId].push(Bet(msg.sender, _side, _amount, _roundId, false));
 
         if (_side) {
             round.totalUp += _amount;
@@ -97,10 +116,7 @@ contract MegaRace is ReentrancyGuard {
         emit BetPlaced(_roundId, msg.sender, _side, _amount);
     }
 
-    function resolveRound(uint256 _roundId, bool _winningSide, uint256 _lpFill)
-        external
-        onlyOperator
-    {
+    function resolveRound(uint256 _roundId, bool _winningSide, uint256 _lpFill) external onlyOperator {
         Round storage round = rounds[_roundId];
         require(!round.resolved, "already resolved");
         require(block.timestamp >= round.endTime, "round not ended");
@@ -130,11 +146,7 @@ contract MegaRace is ReentrancyGuard {
         uint256 totalWinningBet = 0;
         for (uint256 i = 0; i < roundBets[_roundId].length; i++) {
             Bet storage bet = roundBets[_roundId][i];
-            if (
-                bet.player == msg.sender &&
-                !bet.claimed &&
-                bet.side == round.winningSide
-            ) {
+            if (bet.player == msg.sender && !bet.claimed && bet.side == round.winningSide) {
                 totalWinningBet += bet.amount;
                 bet.claimed = true;
             }
