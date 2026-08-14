@@ -1,7 +1,0 @@
-{
-  "build": {
-    "env": {
-      "VITE_BACKEND_URL": "https://megaracing-backend.up.railway.app"
-    }
-  }
-}
